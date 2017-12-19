@@ -1,0 +1,41 @@
+{
+  "name": "kesselrun",
+  "longName": "kesselrun",
+  "description": "A benchmark utility for Node.js.",
+  "version": "1.0.0",
+  "dependencies": {
+    "elv": "^2.0.0",
+    "micromatch": "^3.1.4"
+  },
+  "devDependencies": {
+    "chai": "~3.5.0",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "mocha": "^3.2.0",
+    "nyc": "^10.2.0"
+  },
+  "keywords": [
+    "benchmark",
+    "performance",
+    "speed",
+    "analysis",
+    "test"
+  ],
+  "bin": {
+    "kesselrun": "./bin/kesselrun.js"
+  },
+  "license": "MIT",
+  "main": "./lib",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dsfields/kesselrun"
+  },
+  "scripts": {
+    "lint": "eslint ./*",
+    "test": "NODE_ENV=test nyc --reporter=lcov  --reporter=text mocha --recursive ./test/unit"
+  }
+}
