@@ -2,6 +2,15 @@
 
 Easy to use benchmarking utility for Node.js.  Provides high-precision execution time metrics for: average, min, and max.
 
+__Table of Contents__
+
+* [Usage](#usage)
+* [API](#api)
+* [CLI](#cli)
+* [Benchmarking Very Fast Functions](#benchmarking-very-fast-functions)
+* [CI Pipelines](#ci-pipelines)
+* [Custom Reporter](#custom-reporter)
+
 ## Usage
 
 1. Install `kesselrun` as a dev dependency in your app:
@@ -10,7 +19,7 @@ Easy to use benchmarking utility for Node.js.  Provides high-precision execution
     $ npm install kesselrun -D
     ```
 
-2. Create a `.bench.js` script with series of functions to benchmark:
+2. Create a `.bench.js` script with a series of functions to benchmark:
 
     __benchmark/primes.bench.js__
 
@@ -20,13 +29,13 @@ Easy to use benchmarking utility for Node.js.  Provides high-precision execution
     bench(
       [
         function sieveOfEratosthenes() {
-          // calculate primes to 100000
+          // calculate primes to 10000
         },
         function sieveOfSundaram() {
-          // calculate primes to 100000
+          // calculate primes to 10000
         }
       ],
-      { runs: 100 }
+      { runs: 1000 }
     );
     ```
 
@@ -39,13 +48,13 @@ Easy to use benchmarking utility for Node.js.  Provides high-precision execution
 4. Read the results that are printed to the terminal:
 
     ```sh
-    ┌─────────────────────┬────────────┬────────────┬────────────┐
-    │ NAME                │ AVG        │ MIN        │ MAX        │
-    ╞═════════════════════╪════════════╪════════════╪════════════╡
-    │ sieveOfEratosthenes │ 7289348 ns |
-    ├─────────────────────┼────────────┼────────────┼────────────┤
-    │ sieveOfSundaram     │ 9725699 ns │
-    └—————————————————————┴————————————┴————————————┴————————————┘
+    ┌──────────────────────┬────────────┬────────────┬────────────┐
+    │ NAME                 │ AVG        │ MIN        │ MAX        │
+    ╞══════════════════════╪════════════╪════════════╪════════════╡
+    │ sieveOfErathosthenes │ 1492392 ns │ 1337675 ns │ 5455338 ns │
+    ├──────────────────────┼────────────┼────────────┼────────────┤
+    │ sieveOfSundaram      │ 802019 ns  │ 688149 ns  │ 3883506 ns │
+    └──────────────────────┴────────────┴────────────┴────────────┘
     ```
 
 ## API
@@ -74,7 +83,7 @@ Runs a benchmark analysis for a given array of functions, and generates a report
 
   + `stream`: _(optional)_ a [writable stream](https://nodejs.org/api/stream.html#stream_writable_streams) to which status and report information is written.  The default is `process.stdout`.
 
-  + `thresholds`: _(optional)_ an object that sets performance thresholds for a target function.  A failure to stay within these thresholds will cause the `kesselrun` utility to exit with `1`.
+  + `thresholds`: _(optional)_ an object that sets performance thresholds for a target function.  A failure to stay within these thresholds will cause the `kesselrun` utility to exit with `3`.
 
     All metric thresholds are expressed as a percentage of performance, between the target function and all others (`1 - target/other`) that the target function must meet or exceed.
 
@@ -87,6 +96,74 @@ Runs a benchmark analysis for a given array of functions, and generates a report
     - `target`: _(required)_ the target function who's benchmark metrics must fall within all specified performance thresholds.  This value is a number specifying an index in the `functions` array.
 
 #### Example
+
+```js
+const comparisonModule = require('comparison-module');
+const fs = require('fs');
+
+const myModule = require('../lib');
+
+const params = ['foo', 'bar'];
+const stream = fs.createWriteStream('results.txt');
+
+bench(
+  [
+    {
+      fn: myModule,
+      label: 'My Module',
+      params,
+    },
+    {
+      fn: comparisonModule,
+      label: 'Comparison Module',
+      params,
+    },
+  ],
+  {
+    runs: 1000,
+    stream,
+    thresholds: {
+      avg: 0.5,
+      max: 0.5,
+      min: 0.5,
+      target: 0,
+    },
+  }
+);
+```
+
+In this example, we are comparing 
+
+## CLI
+
+The `kesselrun` command line interface takes a single parameter, which is a [glob](https://en.wikipedia.org/wiki/Glob_(programming)) that specifies how to find bench files to run.
+
+```sh
+$ kesselrun benchmark/**/*.bench.js
+```
+
+## Benchmarking Very Fast Functions
+
+In situations where you need to benchmark very fast functions, you get a more accurate understanding of performance by wrapping what it is you want to test in a function, and execute your function in a loop.
+
+```js
+bench(
+  [
+    function () {
+      for (let i = 0; i < 1000000) {
+        myVeryFastFunction();
+      }
+    }
+  ],
+  { runs: 100 }
+);
+```
+
+## CI Pipelines
+
+It's possible to use `kesselrun` in a continuous integration pipeline, and fail a build in the event that a new version of your code sees an unacceptable drop in performance.
+
+__Example__
 
 ```js
 const myCurrentModule = require('my-module');
@@ -103,10 +180,9 @@ bench(
       fn: myCurrentModule,
       label: 'Currently Published',
       params: ['foo', 'bar'],
-    }
+    },
   ],
   {
-    optimize: true,
     runs: 1000,
     thresholds: {
       avg: -0.08,
@@ -120,23 +196,7 @@ bench(
 
 In this example, we are comparing the performance of the implementation of `my-module` in the local code base against the published version of `my-module`.  Thresholds are set such that if there is a drop in performance of more than 8%, the `kesselrun` utility will exit with an error.
 
-Such a configuration could be used in a CI pipeline to ensure changes to impact performance past a certain threshold.  Be aware that performance benchmarking is non-deterministic, and it's conceivable that, depending on conditions with the host machine, `kesselrun` could fail with a false negative.
-
-## CLI
-
-The `kesselrun` command line interface takes a single parameter, which is a path to bench file to run, or a [glob](https://en.wikipedia.org/wiki/Glob_(programming)) that specifies how to find bench files to run.
-
-Example specifying a file:
-
-```sh
-$ kesselrun benchmark/prime-generators.bench.js
-```
-
-Example specifying a glob:
-
-```sh
-$ kesselrun benchmark/*.bench.js
-```
+Keep in mind that benchmarking is non-deterministic.  It's possible that, depending on conditions with the host, `kesselrun` could fail with a false negative.  It is recommended that you do some experimentation before settling on thresholds to use in your CI pipeline.
 
 ## Custom Reporter
 
