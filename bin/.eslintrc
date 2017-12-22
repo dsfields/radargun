@@ -3,6 +3,7 @@
     "max-len": [
       "error",
       120
-    ]
+    ],
+    "no-console": 0
   }
 }
