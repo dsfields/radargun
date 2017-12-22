@@ -30,4 +30,4 @@ Contributions are welcome as long as the guidelines outlined below are followed.
 
 * New code must maintain 100% code coverage.
 
-The `kesselrun` project is governed using a benevolent dictatorship model.  All pull requests are subject to approval and rejection at the discretion of the project owner.  It is recommend that you open an Issue, and discuss changes before spending time on a pull request that may end up being rejected.
+The `radargun` project is governed using a benevolent dictatorship model.  All pull requests are subject to approval and rejection at the discretion of the project owner.  It is recommend that you open an Issue, and discuss changes before spending time on a pull request that may end up being rejected.

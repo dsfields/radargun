@@ -1,6 +1,6 @@
-# kesselrun
+# radargun
 
-[![Build Status](https://secure.travis-ci.org/dsfields/kesselrun.svg)](https://travis-ci.org/dsfields/kesselrun)
+[![Build Status](https://secure.travis-ci.org/dsfields/radargun.svg)](https://travis-ci.org/dsfields/radargun)
 
 Easy to use benchmarking utility for Node.js.  Provides high-precision execution time metrics for: average, min, and max.
 
@@ -15,17 +15,17 @@ __Table of Contents__
 
 ## Usage
 
-1. Install `kesselrun` as a dev dependency in your app:
+1. Install `radargun` as a dev dependency in your app:
 
     ```sh
-    $ npm install kesselrun -D
+    $ npm install radargun -D
     ```
 
 2. Create a `.bench.js` script with a series of functions to benchmark:
 
     __benchmark/primes.bench.js__
 
-    The `bench()` function is a method added to the global scope by `kesselrun`.
+    The `bench()` function is a method added to the global scope by `radargun`.
 
     ```js
     bench(
@@ -41,10 +41,10 @@ __Table of Contents__
     );
     ```
 
-3. Execute your script with `kesselrun`:
+3. Execute your script with `radargun`:
 
     ```sh
-    $ kesselrun benchmark/primes.bench.js
+    $ radargun benchmark/primes.bench.js
     ```
 
 4. Read the results that are printed to the terminal:
@@ -85,7 +85,7 @@ Runs a benchmark analysis for a given array of functions, and generates a report
 
   + `stream`: _(optional)_ a [writable stream](https://nodejs.org/api/stream.html#stream_writable_streams) to which status and report information is written.  The default is `process.stdout`.
 
-  + `thresholds`: _(optional)_ an object that sets performance thresholds for a target function.  A failure to stay within these thresholds will cause the `kesselrun` utility to exit with `3`.
+  + `thresholds`: _(optional)_ an object that sets performance thresholds for a target function.  A failure to stay within these thresholds will cause the `radargun` utility to exit with `3`.
 
     All metric thresholds are expressed as a percentage of performance, between the target function and all others (`1 - target/other`) that the target function must meet or exceed.
 
@@ -134,14 +134,14 @@ bench(
 );
 ```
 
-In this example, we are comparing the performance of "My Module" against the performance of `comparison-module`.  If My Module's performance is less than 50% greater than that of `comparison-module`, `kesselrun` exits with error code 3.  Results are writen to a file "results.txt."
+In this example, we are comparing the performance of "My Module" against the performance of `comparison-module`.  If My Module's performance is less than 50% greater than that of `comparison-module`, `radargun` exits with error code 3.  Results are writen to a file "results.txt."
 
 ## CLI
 
-The `kesselrun` command line interface takes a single parameter, which is a [glob](https://en.wikipedia.org/wiki/Glob_(programming)) that specifies how to find bench files to run.
+The `radargun` command line interface takes a single parameter, which is a [glob](https://en.wikipedia.org/wiki/Glob_(programming)) that specifies how to find bench files to run.
 
 ```sh
-$ kesselrun benchmark/**/*.bench.js
+$ radargun benchmark/**/*.bench.js
 ```
 
 ## Benchmarking Very Fast Functions
@@ -163,7 +163,7 @@ bench(
 
 ## CI Pipelines
 
-It's possible to use `kesselrun` in a continuous integration pipeline, and fail a build in the event that a new version of your code sees an unacceptable drop in performance.
+It's possible to use `radargun` in a continuous integration pipeline, and fail a build in the event that a new version of your code sees an unacceptable drop in performance.
 
 __Example__
 
@@ -196,13 +196,13 @@ bench(
 );
 ```
 
-In this example, we are comparing the performance of the implementation of `my-module` in the local code base against the published version of `my-module`.  Thresholds are set such that if there is a drop in performance of more than 8%, the `kesselrun` utility will exit with an error.
+In this example, we are comparing the performance of the implementation of `my-module` in the local code base against the published version of `my-module`.  Thresholds are set such that if there is a drop in performance of more than 8%, the `radargun` utility will exit with an error.
 
-Keep in mind that benchmarking is non-deterministic.  It's possible that, depending on conditions with the host, `kesselrun` could fail with a false negative.  It is recommended that you do some experimentation before settling on thresholds to use in your CI pipeline.
+Keep in mind that benchmarking is non-deterministic.  It's possible that, depending on conditions with the host, `radargun` could fail with a false negative.  It is recommended that you do some experimentation before settling on thresholds to use in your CI pipeline.
 
 ## Custom Reporter
 
-A reporter is a function used to generate a benchmark report.  It is called by the [`bench()`](#bench-functions-options) method after it has completed gathering performance metrics.  The `kesselrun` module ships with a built-in formater, which functions as the default.  It is possible to provide a custom reporter function as an option to `bench()`.  This function is called with the parameters:
+A reporter is a function used to generate a benchmark report.  It is called by the [`bench()`](#bench-functions-options) method after it has completed gathering performance metrics.  The `radargun` module ships with a built-in formater, which functions as the default.  It is possible to provide a custom reporter function as an option to `bench()`.  This function is called with the parameters:
 
 * `stream`: a [writable stream](https://nodejs.org/api/stream.html#stream_writable_streams) to which the report should be written.
 

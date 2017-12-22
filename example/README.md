@@ -1,4 +1,4 @@
-# `kesselrun` Example
+# `radargun` Example
 
 To run the examples:
 

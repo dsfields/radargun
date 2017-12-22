@@ -1,6 +1,6 @@
 {
-  "name": "kesselrun",
-  "longName": "kesselrun",
+  "name": "radargun",
+  "longName": "radargun",
   "description": "A benchmark utility for Node.js.",
   "version": "1.0.0",
   "dependencies": {
@@ -25,14 +25,14 @@
     "test"
   ],
   "bin": {
-    "kesselrun": "./bin/kesselrun.js"
+    "radargun": "./bin/radargun.js"
   },
   "license": "MIT",
   "main": "./lib",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/dsfields/kesselrun"
+    "url": "https://github.com/dsfields/radargun"
   },
   "scripts": {
     "lint": "eslint ./*",

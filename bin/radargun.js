@@ -13,10 +13,10 @@ const { spawn } = require('child_process');
 //
 
 
-const runnerPath = path.join(__dirname, '_kesselrun.js');
+const runnerPath = path.join(__dirname, '_radargun.js');
 
 const FAILED_MSG = '\u001b[31mFailed thresholds encountered\u001b[0m\n';
-const SUCCESS_MSG = '\u001b[32mYou completed the Kessel Run in less than 12 parsecs!\u001b[0m\n';
+const SUCCESS_MSG = '\u001b[32mSuccess!\u001b[0m\n';
 const EXIT_EVENT = 'exit';
 const NODE_PROC = 'node';
 const SIGINT = 'SIGINT';

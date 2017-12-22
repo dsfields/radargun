@@ -1,10 +1,10 @@
 {
-  "name": "kesselrun-example",
-  "longName": "kesselrun-example",
-  "description": "This is how kesselrun works",
+  "name": "radargun-example",
+  "longName": "radargun-example",
+  "description": "This is how radargun works",
   "version": "1.0.0",
   "dependencies": {
-    "kesselrun": ".."
+    "radargun": ".."
   },
   "keywords": [
     "benchmark",
@@ -18,9 +18,9 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/dsfields/kesselrun"
+    "url": "https://github.com/dsfields/radargun"
   },
   "scripts": {
-    "bench": "kesselrun ./**/benchmark/*.bench.js"
+    "bench": "radargun ./**/benchmark/*.bench.js"
   }
 }
