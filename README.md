@@ -1,5 +1,7 @@
 # kesselrun
 
+[![Build Status](https://secure.travis-ci.org/dsfields/kesselrun.svg)](https://travis-ci.org/dsfields/kesselrun)
+
 Easy to use benchmarking utility for Node.js.  Provides high-precision execution time metrics for: average, min, and max.
 
 __Table of Contents__
@@ -132,7 +134,7 @@ bench(
 );
 ```
 
-In this example, we are comparing 
+In this example, we are comparing the performance of "My Module" against the performance of `comparison-module`.  If My Module's performance is less than 50% greater than that of `comparison-module`, `kesselrun` exits with error code 3.  Results are writen to a file "results.txt."
 
 ## CLI
 
