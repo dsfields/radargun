@@ -7,7 +7,7 @@ function sieveOfErathosthenes(max) {
 
   for (let i = 2; i < upper; i++) {
     if (!sieve[i]) continue;
-    for (let j = i * 2; j < max; j+= i) {
+    for (let j = i * 2; j < max; j += i) {
       sieve[j] = false;
     }
   }

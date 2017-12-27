@@ -2,7 +2,7 @@
   "name": "radargun",
   "longName": "radargun",
   "description": "A benchmark utility for Node.js.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
     "elv": "^2.0.0",
     "glob": "^7.1.2"
