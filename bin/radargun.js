@@ -32,10 +32,10 @@ const FAILED_THRESHOLD = 3;
 
 function run(files) {
   const len = files.length;
-  let complete = 0;
   let failedThreshold = false;
 
-  files.forEach((file) => {
+  const proceed = (cursor) => {
+    const file = files[cursor];
     const fullPath = path.join(process.cwd(), file);
     const proc = spawn(
       NODE_PROC,
@@ -44,30 +44,33 @@ function run(files) {
     );
 
     proc.on(EXIT_EVENT, (code, signal) => {
-      process.on(EXIT_EVENT, () => {
-        complete++;
-        if (signal) {
-          process.kill(process.pid, signal);
-        } else {
-          if (code === FAILED_THRESHOLD) failedThreshold = true;
+      if (signal) {
+        process.kill(process.pid, signal);
+      } else {
+        if (code === FAILED_THRESHOLD) failedThreshold = true;
 
-          if (complete === len) {
-            if (failedThreshold) {
-              console.log(FAILED_MSG);
-              process.exit(FAILED_THRESHOLD);
-            }
+        const next = cursor + 1;
 
-            console.log(SUCCESS_MSG);
+        if (next >= len) {
+          if (failedThreshold) {
+            console.log(FAILED_MSG);
+            process.exit(FAILED_THRESHOLD);
           }
+
+          console.log(SUCCESS_MSG);
+        } else {
+          proceed(next);
         }
-      });
+      }
     });
 
     process.on(SIGINT, () => {
       proc.kill(SIGINT);
       proc.kill(SIGTERM);
     });
-  });
+  };
+
+  proceed(0);
 }
 
 
